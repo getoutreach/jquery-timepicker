@@ -271,10 +271,16 @@
 			return time;
 		},
 
-		setTime: function(value)
+		setTime: function(value, silent)
 		{
 			var self = this;
 			var settings = self.data('timepicker-settings');
+
+			if (silent === true) {
+				silent = 'silent';
+			} else {
+				silent = undefined;
+			}
 
 			if (settings.forceRoundTime) {
 				var prettyTime = _roundAndFormatTime(_time2int(value), settings)
@@ -282,7 +288,7 @@
 				var prettyTime = _int2time(_time2int(value), settings);
 			}
 
-			_setTimeValue(self, prettyTime);
+			_setTimeValue(self, prettyTime, silent);
 			if (self.data('timepicker-list')) {
 				_setSelected(self, self.data('timepicker-list'));
 			}
@@ -751,7 +757,7 @@
 			self.data('ui-timepicker-value', value);
 			if (source == 'select') {
 				self.trigger('selectTime').trigger('changeTime').trigger('change', 'timepicker');
-			} else if (source != 'error') {
+			} else if (source != 'error' && source != 'silent') {
 				self.trigger('changeTime');
 			}
 
